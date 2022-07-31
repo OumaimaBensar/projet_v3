@@ -106,10 +106,10 @@
                
                 <td>                    
                     <button type="button" class="btn btn-sm btn-primary open-button" 
-                    onclick="openForm()">Traiter</button>
+                    onclick="document.getElementById('create-validation-form-{{$demande->id}}').style.display = 'block';">Traiter</button>
 
-                    <div class="form-popup" id="myForm">
-                    <form    action="{{ route('validation.users.store', $demande->id)}}"  method="POST">
+                    <div class="form-popup" id="create-validation-form-{{$demande->id}}">
+                    <form     action="{{ route('validation.users.store', $demande->id)}}"  method="POST">
                     
                     @csrf  
                     
@@ -142,7 +142,8 @@
                         </div>
 
                         
-                        <button type="submit" class="btn btn-primary btn cancel" onclick="closeForm()">Submit</button>
+                        <button type="submit" class="btn btn-primary btn cancel" onclick="
+                                document.getElementById('create-validation-form-{{$demande->id}}').style.display = 'none';">Submit</button>
                        
                     </form>
                     </div>
@@ -171,16 +172,17 @@
 <script >
         $(document).ready( function () {
         $('#myTable').DataTable();
+
         } );
 
 
-        function openForm() {
-        document.getElementById("myForm").style.display = "block";
+        /* function openForm() {
+            document.getElementById("myForm").style.display = "block";
         }
 
         function closeForm() {
         document.getElementById("myForm").style.display = "none";
-        }
+        } */
 
         function disabletextarea(){
             document.getElementById("disable").disabled = true;

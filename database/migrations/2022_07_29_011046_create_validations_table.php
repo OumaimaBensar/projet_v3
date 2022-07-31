@@ -16,15 +16,16 @@ class CreateValidationsTable extends Migration
         Schema::create('validations', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('demande_id');    	
-            $table->unsignedBigInteger('employee_id');
+            $table->unsignedBigInteger('user_id');
             $table->enum('Reponse',['Accorder','Rejeter definitivement', 'Edit Again']);
-            $table->text('Motif_Validation')->NULL;
+            $table->text('Motif_Validation')->nullable();
             $table->timestamps();
 
             $table->foreign('demande_id')->references('id')->on('demandes')->onDelete('cascade');
-            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
            
         });
+
     }
 
     /**

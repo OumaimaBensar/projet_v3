@@ -44,10 +44,8 @@ class ValidationController extends Controller
      */
     public function store(StoreValidationRequest $request)
     {
-
-        
         $data_val = new Validation([    
-            'employee_id' =>$request->GET('redacteur'),
+            'user_id' =>$request->GET('redacteur'),
             'demande_id' => $request->GET('demande'),
             'Reponse'=> $request->GET('decision'),
             'Motif_Validation'=> $request->GET('motif'),
@@ -90,7 +88,7 @@ class ValidationController extends Controller
      */
     public function update(UpdateValidationRequest $request, Validation $validation)
     {
-        //
+       
     }
 
     /**
