@@ -31,9 +31,12 @@
                     @if (Route::has('login'))
                         <div>
                             @auth
-                                <h7 style="color:white; ">Wellcome {{Auth::user()->name;}}</h7>
+                                <h7 style="color:white;">Wellcome {{Auth::user()->name;}}</h7>
                                 <!-- <a href="{{ url('/home') }}">Home</a> -->
-                                <a style="color:white; "  href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout_form').submit();">logout</a>
+                                <a style="color:white; 
+                                position: absolute;
+                                right: 12px; "
+                                  href="{{ url('/logout') }}" onclick="event.preventDefault(); document.getElementById('logout_form').submit();">logout</a>
                                 <form  id="logout_form" action="{{route('logout')}}" method="POST" style="display:none" >
                                 @csrf
                                 </form>
