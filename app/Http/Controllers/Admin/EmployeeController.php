@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Grade;
 use App\Models\Employee;
+use App\Models\Direction;
+use App\Models\Departement;
+use App\Models\Service;
 use App\Models\Modele;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Http\Requests\UpdateEmployeeRequest;
@@ -36,7 +39,16 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        //
+       $dirs = Direction::all();
+        $deps = Departement::all();
+        $services = Service::all();
+        $emps = Employee::all();
+        $grades = Grade::all();
+        return view('admin.fonctionnaire.create',compact('dirs',
+                                                 'deps',
+                                                 'services',
+                                                 'emps','grades'
+        ));
     }
 
     /**
@@ -47,12 +59,36 @@ class EmployeeController extends Controller
      */
     public function store(StoreEmployeeRequest $request)
     {
+
+ /*       
+
         $file = $request->file('import_file');
 
         Excel::import(new EmployeesImport, $file);
 
         return redirect()->route('admin.fonctionnaire.index')->with('success', 'the file was imported successfully');
+              
+        name f_name cin email tele grade Dir dep service exist_car
+ */  
+$data_emp = new Employee([
+                
+    'nom' =>$request->GET('name'),
+    'prenom' => $request->GET('f_name'),
+    'cin'=> $request->GET('cin'),
+    'mail_prof'=> $request->GET('email'),
+    'num_tele'=> $request->GET('tele'),
+    'grade_id'	=> $request->GET('grade'),
+    'direction_id'	=> $request->GET('Dir'),
+    'departement_id'=> $request->GET('dep'),
+    'service_id'	=> $request->GET('service'),
+    'V_perso'	=> $request->GET('exist_car'),
     
+]);
+$data_emp->save();
+            $request->session()->flash('success', ' EMPLOYEE CREATED');
+            return redirect(route('admin.fonctionnaire.index'));
+ 
+        
     }
 
     /**

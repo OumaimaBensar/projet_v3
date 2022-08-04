@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
@@ -59,6 +60,15 @@ class User extends Authenticatable
     public function hasAnyRoles($roles){
         return null !==  $this->roles()->whereIn('name', $role)->first();
     }
+
+    //check if the user is an employee
+    /* public function isEmployee(){
+        $email = $this->email;
+        $is_emp = DB::table('employees')
+                    ->where('mail_prof', $email)->first();
+        return $is_emp;
+    } */
+
 //-------------------------------
 
 //user<---relation one to many ---> demande
@@ -68,6 +78,10 @@ class User extends Authenticatable
 
 public function validations(){
     return $this->hasMany('App\Models\Validation');
+}
+
+public function employee(){
+    return $this->hasOne('App\Models\Employee');
 }
 
 }

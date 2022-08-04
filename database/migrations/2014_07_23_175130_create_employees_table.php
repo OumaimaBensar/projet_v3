@@ -21,11 +21,18 @@ class CreateEmployeesTable extends Migration
             $table->string('CIN')->unique();
             $table->string('mail_prof')->unique();
             $table->string('num_tele')->unique(); 
-            $table->unsignedBigInteger('grade_id');    	
+            $table->unsignedBigInteger('grade_id'); 
+            $table->unsignedBigInteger('direction_id');    	    	
+            $table->unsignedBigInteger('departement_id');    	
+            $table->unsignedBigInteger('service_id');
+
             $table->enum('V_perso',['Yes','No']);
             $table->timestamps();
 
             $table->foreign('grade_id')->references('id')->on('grades')->onDelete('cascade');
+            $table->foreign('direction_id')->references('id')->on('directions')->onDelete('cascade');
+            $table->foreign('departement_id')->references('id')->on('departements')->onDelete('cascade');
+            $table->foreign('service_id')->references('id')->on('services')->onDelete('cascade');
 
 
         });

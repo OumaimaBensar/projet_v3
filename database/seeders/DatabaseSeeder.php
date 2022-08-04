@@ -21,7 +21,11 @@ class DatabaseSeeder extends Seeder
         $this->call(AuthorisationSeeder::class);
         $this->call(MarqueSeeder::class);
         $this->call(DestinationSeeder::class);
-        
+        $this->call(DirectionSeeder::class);
+        $this->call(DepartementSeeder::class);
+        $this->call(ServiceSeeder::class);
+
+
     }
 }
 

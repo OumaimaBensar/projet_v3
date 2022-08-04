@@ -26,5 +26,21 @@ class Employee extends Model
         return $this->hasMany('App\Models\demande');
     }
 
+    public function direction(){
+        return $this->belongsTo('App\Models\Direction');
+    }
+
+    public function departement(){
+        return $this->belongsTo('App\Models\Departement');
+    }
+
+    public function service(){
+        return $this->belongsTo('App\Models\Service');
+    }
+
+    public function user(){
+        return $this->belongsTo('App\Models\User');
+    }
+
     
 }

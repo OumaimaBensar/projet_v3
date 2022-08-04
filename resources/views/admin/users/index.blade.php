@@ -34,6 +34,7 @@
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
                 <th scope="col">Roles</th>
+                <th scope="col">recognized</th>
                 <th scope="col">Action</th>
                 </tr>
             </thead>
@@ -55,6 +56,12 @@
                 @endforeach
                 </ul>
                 </td>
+
+                @if($user->employee_id != null)
+                    <td>recognized user</td>
+                @else
+                    <td>unrecognized user</td>
+                @endif
                 
                 <td>
                     <a class="btn btn-sm btn-primary" href="{{ route('admin.users.edit', $user->id)}}"  role="button">Edit</a>

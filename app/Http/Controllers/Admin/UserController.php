@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Admin;
 use App\models\Role;
 use App\models\User;
+use App\models\Employee;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\DB;
+
 
 
 class UserController extends Controller
@@ -22,10 +25,23 @@ class UserController extends Controller
         if(Gate::denies('logged_in')){
             dd('no access allowed');
         }
-
+        
         if(Gate::allows('is-admin')){
            
             $users = User::with('roles')->get();
+            
+            $emps = Employee::all();
+            foreach($users as $user){
+                $email = $user->email;
+                $is_emp = DB::table('employees')
+                            ->where('mail_prof', $email)->first();
+               if($is_emp != null)
+                {DB::update('update users set employee_id = ? where id = ? ',[$is_emp->id,$user->id]);
+                }               
+                 
+            }
+
+
             return view('admin.users.index',compact('users'));
             //return view('admin.users.index', ['users'=> User::with('roles')->get()]);
 
