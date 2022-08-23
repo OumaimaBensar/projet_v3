@@ -23,17 +23,17 @@
 <!-- ================= -->
 <div class="card" style="width:77%">
 <h2 class="title2">Fonctionnaire:</h2><br>
-@can('is-admin')
-<button type="button"  class="btn btn-dark" style="width:300px">Edit Grade/Taux_Journalier</button>
 
-<br>
-@endcan
 
  <div class="container mt-5"> 
  @can('is-admin') 
+ 
+<button type="button"  class="btn btn-dark" style="width:300px; margin:20px">Edit Grade/Taux_Journalier</button>
 
- <p> <a class="btn btn-sm btn-success float-right" href="{{route('admin.fonctionnaire.create')}}"  role="button">Create Employee</a></p>
-<br>
+
+
+ <span> <a class="btn btn-sm btn-success float-right" href="{{route('admin.fonctionnaire.create')}}"  role="button">Create Employee</a></span>
+<br><br>
 
         <form action="{{route('admin.fonctionnaire.store')}}"  method="POST"  enctype="multipart/form-data">
                @csrf

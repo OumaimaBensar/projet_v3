@@ -10,6 +10,7 @@
        
         <!-- Styles -->
         <link href = "{{asset('css/app.css')}}"  rel = "stylesheet">
+        
        
          <!-- Js -->
         <script  src = "{{ asset('js/app.js')}}" defer></script>
@@ -56,6 +57,7 @@
 </nav>
 
 <!-- ===================== -->
+
 @can('logged_in')
 <nav class="navbar sub_nav navbar-expand-lg ">
     
@@ -66,37 +68,58 @@
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">DashBoard</a>
                 </li>
-                @can('is-admin')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{route('admin.users.index')}}">User Access</a>
-                </li>
 
+
+            @can('is-admin')
+                
+           
                
-               
-               
+            <div class="dropdown">
+            <button class="btn btn-primary dropdown-toggle" style='width:200px; ' type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="appear()">
+                Items
+            </button>
+            
+            <div class="dropdown" style='width:200px; display:none; position:absolute' id = 'ul' >
+            <ul class="dropdown-menu position-static d-grid gap-1 p-2 rounded-3 mx-0 shadow w-220px" >
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('admin.fonctionnaire.index')}}">Employee</a>
+                        
+                        </li>
+                        
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('admin.car.index')}}">Car</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('admin.driver.index')}}">Driver</a>
+                        </li></ul>
+            </div>
+            </div>
+
             <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.fonctionnaire.index')}}">Employee</a>
-
-               
+                <a class="nav-link" href="{{route('admin.users.index')}}">User Access</a>
             </li>
             
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.car.index')}}">Car</a>
-            </li>
-
-            <li class="nav-item">
-                <a class="nav-link" href="{{route('admin.driver.index')}}">Driver</a>
-            </li>
             @endcan 
+
+
             @can('is-redacteur')   
             <li class="nav-item">
                 <a class="nav-link" href="{{route('redacteur_dem.users.index')}}">Espace_Demande</a>
             </li>
             @endcan
+
+            @can('is-validator')
             <li class="nav-item">
                 <a class="nav-link" href="{{route('validation.users.index')}}">Validation_Space</a>
             </li> 
-                
+            @endcan 
+            
+            @can('is-MissionManager')
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('GestionMission.users.index')}}">Gestion des Missions</a>
+            </li> 
+            @endcan 
             </ul>
         </div>
 
@@ -105,15 +128,43 @@
 </nav>
 @endcan
 
-        
+  
+<!--    -->
+
+
+
+<!--    -->
+
+
+
+
+
+
+
+
+
+
+
+
+
                 
         <main>
             @include('partie_integre_D.alerte')
             @yield ('content')
            
         </main>
-        
+        <script>
+            function appear()
+{                var ul = document.getElementById('ul').style.display = 'block';
+}        </script>
         @yield ('javascript')    
 
     </body>
 </html>
+
+
+
+
+
+
+

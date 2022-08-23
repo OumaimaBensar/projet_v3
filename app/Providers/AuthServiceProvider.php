@@ -37,5 +37,13 @@ class AuthServiceProvider extends ServiceProvider
             return $user->hasAnyRole('saisi'); 
         });
 
+        Gate::define('is-validator', function($user){
+            return $user->hasAnyRole('validation'); 
+        });
+
+        Gate::define('is-MissionManager', function($user){
+            return $user->hasAnyRole('G_Mission'); 
+        });
+
     }
 }

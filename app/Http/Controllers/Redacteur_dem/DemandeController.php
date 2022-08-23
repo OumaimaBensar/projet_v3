@@ -38,62 +38,7 @@ class DemandeController extends Controller
 /*         $emps = Employee::all();
  */       
 
- //first for this authenticated user we are getting the id of the corresponding employee 
-    $user_id = Auth::user()->employee_id;
-
-//then we are getting all the info of the employee using the id that we got.
-
-   /* $emp_user = DB::table('employees')->where('id','=', $user_id); */ 
-    $emp_user = DB::select('SELECT * from employees where id = ?',[ $user_id]);
-
- //then because i m getting an array and inside of it there is a coolection that i could not understand [{ 'name' => 'amine}]
-  //i add those two lines to make it an array 
-  //i know that this is not at all practical but i m test now 
-    $res = $emp_user[0];
-    $array = (array) $res;
- 
-    //then we get to the best part the idea is 
-    // lets first see an exemple :
-    // imagine that the user in a director so the direction name != none 
-    // but the departement and service names are = none
-    // i m getting these info from what you can see in these 3 lines bellow:
-    $Dir = DB::select('SELECT Dir_name from directions where id = ?' , [$array['direction_id'] ]);
-    $dep = DB::select('SELECT Dep_name from departements where id = ?' , [$array['departement_id'] ]);
-    $service = DB::select('SELECT S_name from services where id = ?' , [$array['service_id'] ]);
-
-    $array0 = (array) $Dir[0];
-    $array1 = (array) $dep[0];
-    $array2 = (array) $service[0];
-
-// then this if because the direction in not none it will skip the first if
-
-    if($array0['Dir_name']== 'none'){
-    $emps = DB::select('SELECT * FROM employees where  direction_id <> ? ',[$array['direction_id'] ]);
-    
-    } 
-    // the dep in none so it will be selecting all the employees from the employees 
-    // table that have the same direction as the user and a departement that belongs 
-    //to the same diraction but != none (this last condition on dep is trivial 
-    // because  if there is someone having none as dep_name , the query will give 
-    //only those from the same direction )
-
-    elseif($array1['Dep_name']== 'none'){        
-      $emps = DB::select('SELECT * FROM employees as em where  em.direction_id = ? and departement_id in 
-      (SELECT id from departements as dep where dep.direction_id = ? ) '
-      ,[$array['direction_id'], $array['direction_id'] ]);
-
-      
-     }
-    elseif($array2['S_name']== 'none'){
-        $emps = DB::select('SELECT * FROM employees where direction_id = ? and departement_id = ? && service_id in 
-        (SELECT id from services where departement_id = ? ) 
-         ',[$array['direction_id'], $array['departement_id'], $array['departement_id'] ]);
-    }
-    else{
-        $emps = DB::select('SELECT * FROM employees where service_id = ? and grade_id > ?', [ $array['service_id'], $array['grade_id']]);
-    }
-    
-       
+        $emps = get_sub_emp();
         
 
         $destinations = Destination::all();
@@ -149,24 +94,46 @@ class DemandeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Demande  $demande
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Demande $demande)
+    public function edit($id)
     {
-        //
+       
+        $emps = get_sub_emp();
+        
+        $destinations = Destination::all();
+        $demandes =  Demande::find($id);
+        return view('redacteur_dem.users.edit',compact('emps','destinations','demandes'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\UpdateDemandeRequest  $request
-     * @param  \App\Models\Demande  $demande
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(UpdateDemandeRequest $request, Demande $demande)
+    public function update(UpdateDemandeRequest $request, $id)
     {
-        //
+
+        $demande = Demande::findOrFail($id);
+
+        if(!$demande){
+            $request->session()->flash('error', 'EDITING FAILURE');
+            return redirect(route('redacteur_dem.users.index'));
+        }
+
+        $demande->update($request->except(['_token','Accampagnateurs']));
+
+        $demande->accompagnateurs()->sync($request->Accampagnateurs);
+
+       DB::delete('DELETE  from validations where  Reponse ="Edit Again" and demande_id = ? ',[$id]);
+
+    
+        $request->session()->flash('success', 'DEMANDE EDITED');
+
+        return redirect(route('redacteur_dem.users.index')); 
     }
 
     /**

@@ -17,6 +17,7 @@ class CreateGradesTable extends Migration
             $table->id();
             $table->string('G_name');
             $table->unsignedInteger('T_Journalier');
+            $table->unsignedInteger('ponderation');
             $table->timestamps();
         });
     }

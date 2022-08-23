@@ -12,16 +12,28 @@
 
 /* The popup form - hidden by default */
 .form-popup {
-  display: none;
-  position: fixed;
-    bottom: 200px;
-    right: 630px;
-    border: 3px solid #262020;
+    display: none;
+    position: absolute;
+    bottom: 71px;
+    
+    border: 2px solid #262020;
     z-index: 9;
     padding: 20px 40px 20px;
-    background-color: #e6edef;
-    border-radius:20px;
-    width:400px;
+    
+    border-radius: 20px;
+    width: 700px;
+    height:fit-content;
+    left: 540px;
+    top: -150px;
+    margin-bottom:30px;
+}
+
+.div_style{
+    background-color: white;
+    width: fit-content;
+    padding: 10px;
+    margin: 20px 0px 20px 0px;
+    border-left: 3px solid blueviolet;
 }
 
 
@@ -31,11 +43,7 @@
 @section('content')
         
         
-        
-        
-
-        
-<div class="card" style="width:77%">
+<div class="card" style="width:27%">
             <h2 class="title2">Demandes</h2>
             
             <div class="row">
@@ -47,75 +55,106 @@
                 <table class="table" id="myTable">
             <thead>
                 <tr>
-                
-                <th>check</th>
-                <th scope="col">ID</th>
-                <th>Responsable Mission</th>
-                <th>Accompagnateur</th>
-                <th>date depart</th>
-                <th>date arrive</th>
-                <th>destination</th>
-                <th>Moyen</th>
-                <th>Motif</th>
+                <th></th>
+                <th scope="col">Mission</th>
                 <th>Actions</th>
                 
                 </tr>
             </thead>
-            <tbody>
-         <!-- =========================== -->
-                @foreach($demandes as $demande)
+            <tbody>      
+        
+            @foreach($demandes as $demande)
                 
                 <tr>
                 <th>
                 <div class="form-check">
-                <input class="form-check-input position-static" type="checkbox" id="blankCheckbox" value="option1" aria-label="...">
+                <input class="form-check-input position-static"  type="checkbox" id="blankCheckbox" value="option1" aria-label="..." style="margin-top: 50px;">
                 </div>
                 </th>
                                         
-                <th scope="row">{{$demande->id}}</th>
-                
-                <td>{{\app\Models\Employee::where(['id' => $demande->employee_id])->first()->nom;}}</td>
-                <!-- responsable -->
-
-               <td> 
-                 <!-- accompagnateur!! -->
-                <ul>
-                    @foreach($demande->accompagnateurs as $accompagnateur)
-                        <li>{{$accompagnateur->nom}}</li>
-                    @endforeach
-                </ul> 
-                
-                 </td>
-
-                <td>{{$demande->date_depart}}</td>
-                <td>{{$demande->date_arrive}}</td>
-
-               
-                <!--  destination  -->
-               
-                    
-               <td>{{App\Models\Destination::where(['id' => $demande->destination_id])->first()->Ville;}}</td>
-
-               
-              
-               
-
-                <td>{{$demande->Moyen}}</td>
-                <td>{{$demande->motif}}</td>
-
-               
+                <th scope="row">
+                          <div style = "background-color: #d4ebf7;
+                                        padding: 10px;
+                                        border-radius: 30px;
+                                        text-align: center;
+                                        font-size: 12px;
+                                    "> 
+                    <p>Edited by {{\app\Models\User::where(['id' => $demande->user_id])->first()->name;}}</p>
+                    <p>Directed by {{Illuminate\Support\Facades\DB::table('employees')->where('id' , $demande->employee_id)->pluck('nom');}}  
+                    {{Illuminate\Support\Facades\DB::table('employees')->where('id' , $demande->employee_id)->pluck('prenom');}} 
+                    </p>
+                    <p>Destination : {{App\Models\Destination::where(['id' => $demande->destination_id])->first()->Ville;}}</p> 
+                    </div>
+                </th>
                 <td>                    
-                    <button type="button" class="btn btn-sm btn-primary open-button" 
+                    <button type="button" class="btn btn-sm btn-primary open-button" style="margin-top: 50px;"
                     onclick="document.getElementById('create-validation-form-{{$demande->id}}').style.display = 'block';">Traiter</button>
 
                     <div class="form-popup" id="create-validation-form-{{$demande->id}}">
-                    <form     action="{{ route('validation.users.store', $demande->id)}}"  method="POST">
-                    
-                    @csrf  
-                    
+                   
+                    <button type="button" class="close" style="float:right" onclick="
+                        document.getElementById('create-validation-form-{{$demande->id}}').style.display ='none';" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
 
                          <h4>Validation Form:</h4>
+<br>
+                            <div>
+                                <h4>Mission Info:</h4>
 
+                               
+                               <div class="div_style" style="float:left;"><b>Responsable Mission :</b>
+                               {{Illuminate\Support\Facades\DB::table('employees')->where('id' , $demande->employee_id)->pluck('nom');}}
+
+                               </div>
+                               <div class="div_style" style="margin-left: 300px;"> <b>Accompagnateur :</b>
+                                        
+                                        <li>{{
+                                           Illuminate\Support\Facades\DB::table('employees')
+                                                                        ->wherein('id', function($query) use ($demande) {
+                                                                            $query->from('demande_employee')
+                                                                                  ->where('demande_id', $demande->id)
+                                                                                  ->select('employee_id');
+
+                                                                        })->pluck('nom');
+                                            }}</li>
+                                        
+                               </div>
+                               <div class="div_style"style="margin-right: 90px;
+                                                            float: right;">
+                               <li> <b>date depart :</b>
+                                
+                                     {{$demande->date_depart}}</li>
+
+                                     <li>   <b> date arrive :</b>
+                                     {{$demande->date_arrive}}</li>
+                                     
+                                     
+
+                               </div>
+
+                               
+
+
+                               <div class="div_style"> <b>destination :</b>
+                                
+                              {{App\Models\Destination::where(['id' => $demande->destination_id])->first()->Ville;}}
+
+                               </div>
+                               <div class="div_style"> <b>Moyen :</b>
+                              {{$demande->Moyen}}
+               
+                               </div>
+                               <div class="div_style"> <b>Motif :</b>
+                               {{$demande->motif}}
+                               </div>
+                                
+                            </div>
+                           <div>
+                            <form     action="{{ route('validation.users.store', $demande->id)}}"  method="POST">
+                    
+                             @csrf  
+                             
                             <div class="mb-3">
                             <div class="form-group">
                             <input type="hidden" class="form-control" name="demande" value="{{$demande->id}}" >  
@@ -123,7 +162,7 @@
                             </div>
                             </div>
                             <div class="form-check">
-                                
+                            <h6> Your decision:</h6>
                             <input type="radio" id="Accorder" name="decision" value="Accorder" onclick="disabletextarea()">
                             <label for="Accorder">Accorder</label><br>
                             <input type="radio" id="Rejeter" name="decision" value="Rejeter definitivement" onclick="enabletextarea()">
@@ -144,16 +183,18 @@
                         
                         <button type="submit" class="btn btn-primary btn cancel" onclick="
                                 document.getElementById('create-validation-form-{{$demande->id}}').style.display = 'none';">Submit</button>
+                        
+                        <button type="button" class=" btn btn-danger btn cancel" onclick="
+                        document.getElementById('create-validation-form-{{$demande->id}}').style.display ='none';">Close</button>
+
+                        
+                                
                        
                     </form>
                     </div>
                 </td>
-                
-                </tr>
-
-
-                
-                 @endforeach 
+                </tr>                           
+                @endforeach 
                 <!-- =========================== -->
 
 
@@ -161,7 +202,6 @@
             </table>
        </div>
 
-     
         
     
 @endsection
@@ -178,9 +218,9 @@
 
         /* function openForm() {
             document.getElementById("myForm").style.display = "block";
-        }
+        }*/
 
-        function closeForm() {
+        /* function closeForm() {
         document.getElementById("myForm").style.display = "none";
         } */
 

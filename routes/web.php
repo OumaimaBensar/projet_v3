@@ -7,6 +7,7 @@ use Admin\CarController;
 use Admin\DriverController;
 use Redacteur_dem\DemandeController;
 use Validate\ValidationController;
+use Gestion\GestionMissionController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -41,3 +42,6 @@ Route::prefix('validation')->middleware('auth')->name('validation.')->group(func
 
 });
 
+Route::prefix('GestionMission')->name('GestionMission.')->group(function(){
+    Route::resource('/users', GestionMissionController::class);
+});
