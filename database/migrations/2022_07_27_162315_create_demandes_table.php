@@ -22,11 +22,15 @@ class CreateDemandesTable extends Migration
             $table->unsignedBigInteger('destination_id');
             $table->enum('Moyen',['voiture Personnelle','voiture de service', 'train', 'avion']);
             $table->text('motif'); 
+            $table->unsignedBigInteger('deplacement_id');    	
+
             $table->timestamps();
 
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('destination_id')->references('id')->on('destinations')->onDelete('cascade');
+            $table->foreign('deplacement_id')->references('id')->on('deplacements')->onDelete('cascade');
+
 
         });
     }

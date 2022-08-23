@@ -84,4 +84,14 @@ public function employee(){
     return $this->hasOne('App\Models\Employee');
 }
 
+public function affectations(){
+
+    return $this->hasMany('App\Models\Affectation');
+}
+
+public function deplacements(){
+
+    return $this->hasMany('App\Models\Deplacement');
+}
+
 }

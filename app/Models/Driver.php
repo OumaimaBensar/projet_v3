@@ -15,4 +15,9 @@ class Driver extends Model
 
         return $this->hasMany('App\Models\Affectation');
     }
+
+    public function deplacements(){
+
+        return $this->hasMany('App\Models\Deplacement');
+    }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Affectation extends Model
+class Deplacement extends Model
 {
     use HasFactory;
 
@@ -14,10 +14,6 @@ class Affectation extends Model
 
     public function user(){
         return $this->belongsTo('App\Models\User');
-    }
-
-    public function employee(){
-        return $this->hasOne('App\Models\Employee');
     }
 
     public function car(){
