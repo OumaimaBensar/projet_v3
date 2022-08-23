@@ -42,5 +42,9 @@ class Employee extends Model
         return $this->belongsTo('App\Models\User');
     }
 
+    public function affectations(){
+
+        return $this->belongsTo('App\Models\Affectation');
+    }
     
 }

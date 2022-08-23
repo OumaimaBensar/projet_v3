@@ -14,4 +14,9 @@ class Car extends Model
     public function marque(){
         return $this->belongsTo('App\Models\Marque');
     }
+
+    public function affectations(){
+
+        return $this->hasMany('App\Models\Affectation');
+    }
 }

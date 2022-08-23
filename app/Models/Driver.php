@@ -10,4 +10,9 @@ class Driver extends Model
     use HasFactory;
 
     protected $guarded=[];
+
+    public function affectations(){
+
+        return $this->hasMany('App\Models\Affectation');
+    }
 }

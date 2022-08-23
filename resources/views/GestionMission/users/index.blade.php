@@ -27,7 +27,7 @@
             
             <div class="row">
            
-            <span> <button  class="btn btn-sm btn-primary float-right"  >sittings</button></span>
+            <span> <a  class="btn btn-sm btn-primary float-right" href='#'  >Affectation</a></span>
 
 
            </div>

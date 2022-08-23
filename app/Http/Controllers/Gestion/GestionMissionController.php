@@ -66,12 +66,12 @@ class GestionMissionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  (array)  $id
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        dd($request);
+       
     }
 
     /**
