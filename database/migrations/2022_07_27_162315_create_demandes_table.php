@@ -22,7 +22,7 @@ class CreateDemandesTable extends Migration
             $table->unsignedBigInteger('destination_id');
             $table->enum('Moyen',['voiture Personnelle','voiture de service', 'train', 'avion']);
             $table->text('motif'); 
-            $table->unsignedBigInteger('deplacement_id');    	
+            $table->unsignedBigInteger('deplacement_id')->nullable();    	
 
             $table->timestamps();
 

@@ -1,8 +1,17 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Gestion;
+use App\Http\Controllers\Controller;
 
+use App\Models\User;
+use App\Models\Car;
+use App\Models\Driver;
+use App\Models\Employee;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Affectation;
+use Illuminate\Http\Request;
+
 use App\Http\Requests\StoreAffectationRequest;
 use App\Http\Requests\UpdateAffectationRequest;
 
@@ -15,8 +24,14 @@ class AffectationController extends Controller
      */
     public function index()
     {
-        //
-    }
+        $cars = Car::with('marque')->get();
+        $employees = Employee::all();
+        $drivers = Driver::all();
+
+        $affectations = Affectation::with('employee','car','driver')->get();
+
+        return view('GestionMission.affectations.index', compact('cars', 'employees','drivers','affectations'));
+     }
 
     /**
      * Show the form for creating a new resource.
@@ -25,7 +40,7 @@ class AffectationController extends Controller
      */
     public function create()
     {
-        //
+
     }
 
     /**
@@ -36,7 +51,12 @@ class AffectationController extends Controller
      */
     public function store(StoreAffectationRequest $request)
     {
-        //
+        $affectations = Affectation::create($request->except(['_token']));
+
+        $request->session()->flash('success', ' AFFECTATION AJOUTEE ');
+
+        return redirect(route('GestionMission.affectations.index'));
+
     }
 
     /**
@@ -76,11 +96,12 @@ class AffectationController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Affectation  $affectation
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Affectation $affectation)
+    public function destroy($id, Request $request)
     {
-        //
-    }
+        Affectation::destroy($id);
+        $request->session()->flash('success', 'AFFECTATION DELETED');
+        return redirect(route('GestionMission.affectations.index'));    }
 }

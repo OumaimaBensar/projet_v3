@@ -6,6 +6,8 @@ use App\Models\Demande;
 use App\Models\Destination;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\Deplacement;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -37,9 +39,30 @@ class GestionMissionController extends Controller
                                   ->select('id');
                           })
                           ->select('demande_id');
-                    })->get();
+                    })
+                    ->where('deplacement_id',NULL)
+                    ->get();
 
-        return view('GestionMission.users.index', compact('demandes'));
+
+        $voitures = DB::table('cars')->whereNotIn('id',function($q){
+                                        $q->from('affectations')
+                                          ->select('car_id');
+                                    })->get();
+
+        $conducteurs = DB::table('drivers')->whereNotIn('id',function($q){
+            $q->from('affectations')
+              ->where('driver_id','<>',NULL)
+              ->select('driver_id');
+        })->get();
+           
+        $deps = Demande::join('deplacements', 'demandes.deplacement_id', '=', 'deplacements.id')
+        ->whereDate('deplacements.created_at', DB::raw('CURDATE()'))
+        ->get(['deplacements.*','demandes.*']);
+
+        
+        
+
+        return view('GestionMission.users.index', compact('demandes','voitures','conducteurs','deps'));
     }
 
     /**
@@ -49,7 +72,7 @@ class GestionMissionController extends Controller
      */
     public function create()
     {
-        //
+       
     }
 
     /**
@@ -60,7 +83,23 @@ class GestionMissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $deps = Deplacement::create($request->except(['_token','mycheckboxes']));
+
+        $r = DB::table('demandes')
+        ->wherein('id', $request->mycheckboxes)
+        ->update(
+            [
+                'deplacement_id' => $deps->id
+            ]
+        );
+
+        
+       
+
+        $request->session()->flash('success', ' DEPLACEMENT AJOUTEE ');
+
+        return redirect(route('GestionMission.users.index'));
+
     }
 
     /**

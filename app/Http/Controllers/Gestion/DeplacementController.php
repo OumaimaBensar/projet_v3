@@ -2,6 +2,15 @@
 
 namespace App\Http\Controllers;
 
+namespace App\Http\Controllers\Gestion;
+use App\Http\Controllers\Controller;
+use App\Models\Demande;
+use App\Models\Destination;
+use App\Models\User;
+use App\Models\Employee;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 use App\Models\Deplacement;
 use App\Http\Requests\StoreDeplacementRequest;
 use App\Http\Requests\UpdateDeplacementRequest;
@@ -15,7 +24,7 @@ class DeplacementController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**

@@ -8,6 +8,8 @@ use Admin\DriverController;
 use Redacteur_dem\DemandeController;
 use Validate\ValidationController;
 use Gestion\GestionMissionController;
+use Gestion\AffectationController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -44,4 +46,5 @@ Route::prefix('validation')->middleware('auth')->name('validation.')->group(func
 
 Route::prefix('GestionMission')->name('GestionMission.')->group(function(){
     Route::resource('/users', GestionMissionController::class);
+    Route::resource('/affectations', AffectationController::class);
 });

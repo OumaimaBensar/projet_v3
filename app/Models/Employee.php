@@ -44,7 +44,7 @@ class Employee extends Model
 
     public function affectations(){
 
-        return $this->belongsTo('App\Models\Affectation');
+        return $this->hasOne('App\Models\Affectation');
     }
     
 }

@@ -17,7 +17,7 @@ class Affectation extends Model
     }
 
     public function employee(){
-        return $this->hasOne('App\Models\Employee');
+        return $this->belongsTo('App\Models\Employee');
     }
 
     public function car(){
