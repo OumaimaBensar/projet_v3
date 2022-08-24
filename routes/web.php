@@ -7,8 +7,9 @@ use Admin\CarController;
 use Admin\DriverController;
 use Redacteur_dem\DemandeController;
 use Validate\ValidationController;
-use Gestion\GestionMissionController;
 use Gestion\AffectationController;
+use Gestion\GestionMissionController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -48,3 +49,5 @@ Route::prefix('GestionMission')->name('GestionMission.')->group(function(){
     Route::resource('/users', GestionMissionController::class);
     Route::resource('/affectations', AffectationController::class);
 });
+
+

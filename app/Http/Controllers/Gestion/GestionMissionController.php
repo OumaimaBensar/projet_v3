@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Employee;
 use App\Models\Deplacement;
 
+use Barryvdh\DomPDF\Facade\Pdf;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -110,7 +112,29 @@ class GestionMissionController extends Controller
      */
     public function show($id)
     {
-       
+
+        $demande = Demande::findOrFail($id);
+
+        if(!$demande){
+            $request->session()->flash('error', 'DEMANDE NOT FOUND');
+            return redirect(route('GestionMission.users.index'));
+        }
+
+        $deps = Demande::join('deplacements', 'demandes.deplacement_id', '=', 'deplacements.id')
+        ->where('demandes.id','=', $demande->id)
+        ->whereDate('deplacements.created_at', DB::raw('CURDATE()'))
+        ->first(['deplacements.*','demandes.*']);
+
+
+        $pdf = Pdf::loadView('GestionMission.users.show', compact('deps'));
+
+       $nom = DB::table('employees')->where('id', $deps->employee_id)->get('nom');
+       $prenom = DB::table('employees')->where('id', $deps->employee_id)->get('prenom');
+
+
+        return $pdf->download($nom .'_'.$prenom. '.pdf');
+
+
     }
 
     /**
@@ -146,4 +170,10 @@ class GestionMissionController extends Controller
     {
         //
     }
+
+    /* public function Pdf()
+    {
+        dd('yes i m here');
+    } */
+
 }

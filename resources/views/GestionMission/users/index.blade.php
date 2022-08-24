@@ -161,7 +161,7 @@
         <div class="form-group">
             <label for="exampleFormControlSelect1" style='color:white'>Conducteur</label>
             <select class="form-control" name="driver_id" id="exampleFormControlSelect1" style='width:300px'>
-
+            <option value="">NONE</option>
             @foreach($conducteurs as $conducteur)
             <option value="{{$conducteur->id}}">{{$conducteur->Nom}}   {{$conducteur->Prenom}} </option>
             @endforeach
@@ -175,7 +175,7 @@
         <div class="form-group">
             <label for="exampleFormControlSelect1" style='color:white'>Voiture de service</label>
             <select class="form-control" name="car_id" id="exampleFormControlSelect1" style='width:300px'>
-
+            <option value="">NONE</option>
             @foreach($voitures as $voiture)
             <option value="{{$voiture->id}}">{{$voiture->matricule}} </option>
             @endforeach  
@@ -256,13 +256,22 @@
                <td>{{$dep->date_arrive}}</td>
                <td>{{App\Models\Destination::where(['id' => $dep['destination_id']])->first()->Ville;}}</td>
                <td>{{$dep->Moyen}}</td>
+               @if($dep->car_id == NULL)
+               <td>None</td>
+               @else
                <td>{{App\Models\Car::where(['id' => $dep['car_id']])->first()->matricule;}}</td>
+               @endif
+
+               @if($dep->driver_id == NULL)
+                <td>None</td>
+                @else
                <td>{{App\Models\Driver::where(['id' => $dep['driver_id']])->first()->Nom;}}</td>
+               @endif
                <td>{{$dep->motif}}</td>
 
                <td><a  class="btn btn-sm btn-primary float-right" href='#' style="width:120px" >Aviser </a> 
                <br>
-               <button  class="btn btn-sm btn-danger float-right" href='#'   >Ordre de Mission </button></td>
+               <a  class="btn btn-sm btn-danger float-right" href='{{route("GestionMission.users.show",$dep->id)}}'>Ordre de Mission </a></td>
               
 
                <td></td>
